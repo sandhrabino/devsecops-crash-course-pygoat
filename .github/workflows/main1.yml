@@ -28,6 +28,25 @@ jobs:
       with:
         name: bandit-findings
         path: bandit-report.json
+    
+    image_scan: 
+      name: build image and run scan on image
+      runs-on: ubuntu-latest
 
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: setup docker
+        uses: docker-practice/actions-setup-docker@v1
+        with: 
+          docker_version: 20.10
+
+      - name: Docker Scout scan
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
+          sh install-scout.sh
+          docker scout quickview
+          docker scout cves 
   
 
